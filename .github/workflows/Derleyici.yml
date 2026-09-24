@@ -40,6 +40,7 @@ jobs:
       - name: Eski Derlemeleri Temizle
         run: |
           rm -f "$GITHUB_WORKSPACE"/builds/*.cs3
+          rm -f "$GITHUB_WORKSPACE"/builds/plugins.json
 
       - name: JDK 17 Ayarla
         uses: actions/setup-java@v6
@@ -50,11 +51,14 @@ jobs:
 
       - name: Android SDK Ayarla
         uses: android-actions/setup-android@v4
-        with:
-          packages: "platform-tools"
+
+      - name: Android SDK Lisanslarını Kabul Et
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
 
       - name: Android SDK Paketlerini Hazırla
         run: |
+          sdkmanager "platform-tools"
           sdkmanager "platforms;android-35"
           sdkmanager "build-tools;35.0.0"
 
